@@ -13,14 +13,16 @@ let searchQueryValue = '';
 
 searchForm.addEventListener('submit', async event => {
   event.preventDefault();
+
   const { searchQuery } = event.target;
+  const trimmedSearchQuery = searchQuery.value.trim();
+  searchQueryValue = searchQuery.value.trim();
 
   gallery.innerHTML = '';
-  searchQueryValue = searchQuery.value;
 
   loadMoreBtn.classList.add('is-hidden');
 
-  if (searchQuery.value === '') {
+  if (trimmedSearchQuery === '') {
     Notify.info('Insert search query');
     return;
   }
@@ -36,6 +38,7 @@ searchForm.addEventListener('submit', async event => {
     if (data.hits.length > 10) {
       loadMoreBtn.classList.remove('is-hidden');
     }
+
     const markup = await galleryMarkup(data);
 
     lightBox.refresh();
@@ -73,7 +76,6 @@ loadMoreBtn.addEventListener('click', async () => {
 });
 
 async function galleryMarkup(data) {
-  //
   const markup = await data.hits
     .map(image => {
       return `
